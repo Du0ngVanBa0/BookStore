@@ -1,0 +1,10 @@
+
+a
+java:S2184"FCast one of the operands of this multiplication operation to a "long".(Š”úÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(³æ†çÿÿÿÿÿ
+<
+java:S1170"!Make this final field static too.(òğËÎøÿÿÿÿ
+<
+java:S1170"!Make this final field static too.(Š”úÿÿÿÿ
+—
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¥´”¹
