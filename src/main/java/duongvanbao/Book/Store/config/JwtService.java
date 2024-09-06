@@ -20,7 +20,7 @@ public class JwtService {
     public JwtService() {
     }
 
-    private final String jwtSecret = "EmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSamaEmiliaTanBakaSama";
+    private final String jwtSecret = System.getenv("JWT_SECRET");
     private final long jwtExpirationMs = 1000 * 60 * 60;
 
     public String extractUserEmail(String token) {

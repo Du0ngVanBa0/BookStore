@@ -95,8 +95,8 @@ public class AuthController {
         if (ticketOptional.isPresent()) {
             UserTicket thisTicket = ticketOptional.get();
             if (!thisTicket.isActive() && !thisTicket.isVerified() && thisTicket.getExpiredTime().isAfter(LocalDateTime.now())) {
-                String newOtp = userTicketService.reGenerateOtp(thisTicket);
                 try {
+                    String newOtp = userTicketService.reGenerateOtp(thisTicket);
                     emailService.sendOtpRegisterEmail(thisTicket.getEmail(), newOtp, thisTicket.getTicketType());
                 } catch (Exception e) {
                     return new ResponseEntity<>(new MessageResponse("Cant send otp now!"), HttpStatus.BAD_REQUEST);
@@ -117,7 +117,7 @@ public class AuthController {
         if (ticketOptional.isPresent()) {
             // check is ticket valid (and not expired)
             UserTicket thisTicket = ticketOptional.get();
-            if (!thisTicket.isActive() && thisTicket.isVerified() && thisTicket.getVerifiedTime().plusSeconds(Util.getExpireTimeChangePass()).isAfter(LocalDateTime.now())) {
+            if (thisTicket.isActive() && thisTicket.isVerified() && thisTicket.getVerifiedTime().plusSeconds(Util.getExpireTimeChangePass()).isAfter(LocalDateTime.now())) {
                 AuthResponse res;
                 try {
                     res = authService.changePassword(thisTicket.getEmail(), data.password());
