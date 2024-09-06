@@ -29,5 +29,5 @@ replay_pid*
 *.iml
 *.ipr
 
-*.env
+.env
 target/
