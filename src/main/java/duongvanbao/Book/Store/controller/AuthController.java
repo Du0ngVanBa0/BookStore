@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -110,6 +112,25 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/authenticate-google")
+    public ResponseEntity<?> handleOAuth2Success(OAuth2AuthenticationToken authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            OAuth2User oauth2User = authentication.getPrincipal();
+            String email = oauth2User.getAttribute("email");
+            String name = oauth2User.getAttribute("name");
+
+            // Here, you should implement logic to create or retrieve a user based on the email
+            // and generate a JWT token for them
+
+            // For example:
+            // User user = userService.findOrCreateUser(email, name);
+            // String token = jwtService.generateToken(user);
+
+            // Return the token or redirect to your frontend with the token
+            return ResponseEntity.ok(new AuthResponse("dummy_token"));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+    }
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest data) {
@@ -159,6 +180,7 @@ public class AuthController {
         try {
             return new ResponseEntity<>(authService.authenticate(data), HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(new MessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }

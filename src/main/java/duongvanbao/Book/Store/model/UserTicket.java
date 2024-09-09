@@ -8,40 +8,33 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Builder
 @Entity
 public class UserTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Getter
     private String id;
 
-    @Getter
     @Setter
     private String email;
 
     @Setter
-    @Getter
     private String otp;
 
-    @Getter
     @Setter
     private LocalDateTime expiredTime;
 
     @Setter
-    @Getter
     private boolean isVerified = false;
 
-    @Getter
     @Setter
     private LocalDateTime verifiedTime;
 
     @Setter
-    @Getter
     private boolean isActive = false;
 
     @Enumerated(EnumType.STRING)
-    @Getter
     private TicketType ticketType;
 
     public UserTicket(String id, String email, String otp, LocalDateTime expiredTime, boolean isVerified, LocalDateTime verifiedTime, boolean isActive, TicketType ticketType) {
