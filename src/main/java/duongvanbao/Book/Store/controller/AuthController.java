@@ -112,24 +112,21 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/authenticate-google")
+    @GetMapping("/oauth2/success")
     public ResponseEntity<?> handleOAuth2Success(OAuth2AuthenticationToken authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             OAuth2User oauth2User = authentication.getPrincipal();
             String email = oauth2User.getAttribute("email");
             String name = oauth2User.getAttribute("name");
 
-            // Here, you should implement logic to create or retrieve a user based on the email
-            // and generate a JWT token for them
-
-            // For example:
-            // User user = userService.findOrCreateUser(email, name);
-            // String token = jwtService.generateToken(user);
-
-            // Return the token or redirect to your frontend with the token
-            return ResponseEntity.ok(new AuthResponse("dummy_token"));
+            try {
+                AuthResponse response = authService.authenticateGoogle(email, name);
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(e.getMessage()));
+            }
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Authentication failed"));
     }
 
     @PostMapping("/change-password")

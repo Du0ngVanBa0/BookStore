@@ -57,6 +57,27 @@ public class AuthService {
         return new MessageResponse(ticket.getId());
     }
 
+    public AuthResponse authenticateGoogle(String email, String name) throws Exception {
+        Optional<User> userOptional = userService.findByEmail(email);
+        User user;
+    
+        if (userOptional.isEmpty()) {
+            // Create a new user if not exists
+            user = User.builder()
+                    .email(email)
+                    .name(name)
+                    .role(Role.USER)
+                    .enabled(true)
+                    .build();
+            userService.save(user);
+        } else {
+            user = userOptional.get();
+        }
+    
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthResponse(jwtToken);
+    }
+
     public AuthResponse changePassword(String email, String password) throws Exception {
         Optional<User> user = userService.findByEmail(email);
         if (user.isEmpty()) {
