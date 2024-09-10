@@ -53,15 +53,15 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint()
-                        .baseUri("/oauth2/authorize")
-                        .and()
-                        .redirectionEndpoint()
-                        .baseUri("/login/oauth2/code/*")
-                        .and()
+//                        .authorizationEndpoint()
+//                        .baseUri("/oauth2/authorize")
+//                        .and()
+//                        .redirectionEndpoint()
+//                        .baseUri("/login/oauth2/code/*")
+//                        .and()
                         .userInfoEndpoint()
                         .userService(customOAuth2UserService)
                         .and()
