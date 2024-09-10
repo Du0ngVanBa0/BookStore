@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.ObjectProvider;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -31,12 +33,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
         String email = oauth2User.getAttribute("email");
         String name = oauth2User.getAttribute("name");
-
         try {
             AuthService authService = authServiceProvider.getObject();
             AuthResponse authResponse = authService.authenticateGoogle(email, name);
             response.setContentType("application/json");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(authResponse));
+            response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
+            String encodedToken = URLEncoder.encode(authResponse.token(), StandardCharsets.UTF_8);
+            response.sendRedirect(System.getenv("GOOGLE_REDIRECT_URI")+"/"+encodedToken);
         } catch (Exception e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.getWriter().write(e.getMessage());
