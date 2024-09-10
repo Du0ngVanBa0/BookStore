@@ -112,23 +112,6 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/oauth2/success")
-    public ResponseEntity<?> handleOAuth2Success(OAuth2AuthenticationToken authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            OAuth2User oauth2User = authentication.getPrincipal();
-            String email = oauth2User.getAttribute("email");
-            String name = oauth2User.getAttribute("name");
-
-            try {
-                AuthResponse response = authService.authenticateGoogle(email, name);
-                return ResponseEntity.ok(response);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(e.getMessage()));
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Authentication failed"));
-    }
-
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest data) {
         Optional<UserTicket> ticketOptional = userTicketService.findById(data.ticketId());

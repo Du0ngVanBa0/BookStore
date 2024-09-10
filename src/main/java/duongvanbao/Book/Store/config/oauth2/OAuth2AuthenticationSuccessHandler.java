@@ -51,9 +51,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         );
         try {
             AuthService authService = authServiceProvider.getObject();
-            AuthResponse authResponse = authService.authenticateGoogle(email, name);
+            AuthResponse authResponse = authService.authenticateGoogle(googleUser);
             response.setContentType("application/json");
-            response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
+//            response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
             String encodedToken = URLEncoder.encode(authResponse.token(), StandardCharsets.UTF_8);
             response.sendRedirect(System.getenv("GOOGLE_REDIRECT_URI")+"/"+encodedToken);
         } catch (Exception e) {

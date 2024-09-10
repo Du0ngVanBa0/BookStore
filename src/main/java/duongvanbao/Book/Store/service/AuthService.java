@@ -56,15 +56,16 @@ public class AuthService {
         return new MessageResponse(ticket.getId());
     }
 
-    public AuthResponse authenticateGoogle(String email, String name) throws Exception {
-        Optional<User> userOptional = userService.findByEmail(email);
+    public AuthResponse authenticateGoogle(GoogleUser thisUser) throws Exception {
+        Optional<User> userOptional = userService.findByEmail(thisUser.email());
         User user;
     
         if (userOptional.isEmpty()) {
             // Create a new user if not exists
             user = User.builder()
-                    .email(email)
-                    .name(name)
+                    .email(thisUser.email())
+                    .name(thisUser.name())
+                    .picture(thisUser.picture())
                     .role(Role.USER)
                     .enabled(true)
                     .build();

@@ -41,6 +41,7 @@ public class JwtService {
 
         if (userDetails instanceof User thisUser) {
             claims.put("name", thisUser.getName());
+            claims.put("picture", thisUser.getPicture());
         }
 
         return Jwts.builder()
