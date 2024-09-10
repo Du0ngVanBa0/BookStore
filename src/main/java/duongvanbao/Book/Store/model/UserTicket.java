@@ -1,6 +1,6 @@
 package duongvanbao.Book.Store.model;
 
-import duongvanbao.Book.Store.dto.TicketType;
+import duongvanbao.Book.Store.dto.auth.TicketType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

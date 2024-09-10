@@ -26,6 +26,10 @@
         private String password;
 
         @Getter
+        @Setter
+        private String picture;
+
+        @Getter
         private String name;
 
         @Enumerated(EnumType.STRING)
@@ -34,10 +38,11 @@
         @Setter
         private boolean enabled;
 
-        public User(String id, String email, String password, String name, Role role, boolean enabled) {
+        public User(String id, String email, String password, String picture, String name, Role role, boolean enabled) {
             this.id = id;
             this.email = email;
             this.password = password;
+            this.picture = picture;
             this.name = name;
             this.role = role;
             this.enabled = enabled;

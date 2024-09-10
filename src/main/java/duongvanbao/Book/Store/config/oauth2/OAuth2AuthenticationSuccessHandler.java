@@ -1,7 +1,8 @@
 package duongvanbao.Book.Store.config.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import duongvanbao.Book.Store.dto.AuthResponse;
+import duongvanbao.Book.Store.dto.auth.AuthResponse;
+import duongvanbao.Book.Store.dto.auth.GoogleUser;
 import duongvanbao.Book.Store.service.AuthService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +32,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-        String email = oauth2User.getAttribute("email");
+
+        String sub = oauth2User.getAttribute("sub");
         String name = oauth2User.getAttribute("name");
+        String givenName = oauth2User.getAttribute("given_name");
+        String familyName = oauth2User.getAttribute("family_name");
+        String picture = oauth2User.getAttribute("picture");
+        String email = oauth2User.getAttribute("email");
+        boolean emailVerified = Boolean.TRUE.equals(oauth2User.getAttribute("email_verified"));
+        GoogleUser googleUser = new GoogleUser(
+                sub,
+                name,
+                givenName,
+                familyName,
+                picture,
+                email,
+                emailVerified
+        );
         try {
             AuthService authService = authServiceProvider.getObject();
             AuthResponse authResponse = authService.authenticateGoogle(email, name);

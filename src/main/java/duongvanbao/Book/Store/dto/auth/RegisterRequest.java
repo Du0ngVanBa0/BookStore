@@ -1,4 +1,4 @@
-package duongvanbao.Book.Store.dto;
+package duongvanbao.Book.Store.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

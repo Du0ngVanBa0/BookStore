@@ -1,7 +1,7 @@
 package duongvanbao.Book.Store.service;
 
 import duongvanbao.Book.Store.config.JwtService;
-import duongvanbao.Book.Store.dto.*;
+import duongvanbao.Book.Store.dto.auth.*;
 import duongvanbao.Book.Store.model.Role;
 import duongvanbao.Book.Store.model.User;
 import duongvanbao.Book.Store.model.UserTicket;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class AuthService {

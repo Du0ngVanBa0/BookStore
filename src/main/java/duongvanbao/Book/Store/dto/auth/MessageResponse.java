@@ -1,4 +1,4 @@
-package duongvanbao.Book.Store.dto;
+package duongvanbao.Book.Store.dto.auth;
 
 public record MessageResponse(
         String message

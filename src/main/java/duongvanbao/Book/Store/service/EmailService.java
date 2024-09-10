@@ -1,6 +1,6 @@
 package duongvanbao.Book.Store.service;
 
-import duongvanbao.Book.Store.dto.TicketType;
+import duongvanbao.Book.Store.dto.auth.TicketType;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

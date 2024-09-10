@@ -1,6 +1,6 @@
 package duongvanbao.Book.Store.controller;
 
-import duongvanbao.Book.Store.dto.*;
+import duongvanbao.Book.Store.dto.auth.*;
 import duongvanbao.Book.Store.model.User;
 import duongvanbao.Book.Store.model.UserTicket;
 import duongvanbao.Book.Store.service.AuthService;
