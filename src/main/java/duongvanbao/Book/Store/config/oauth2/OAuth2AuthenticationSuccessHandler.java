@@ -53,8 +53,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             AuthService authService = authServiceProvider.getObject();
             AuthResponse authResponse = authService.authenticateGoogle(googleUser);
             response.setContentType("application/json");
-//            response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
-            response.sendRedirect(System.getenv("GOOGLE_REDIRECT_URI")+"/"+authResponse.token());
+            response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
         } catch (Exception e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.getWriter().write(e.getMessage());
