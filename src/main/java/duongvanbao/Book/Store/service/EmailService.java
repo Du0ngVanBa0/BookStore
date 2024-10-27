@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,7 @@ public class EmailService {
     @Value("${spring.mail.username.name}")
     private String fromName;
 
+    @Async
     public void sendOtpRegisterEmail(String to, String otp, TicketType ticketType) throws Exception {
         String action = "";
         if (ticketType == TicketType.REGISTRATION) {
