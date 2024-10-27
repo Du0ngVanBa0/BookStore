@@ -1,9 +1,7 @@
     package duongvanbao.Book.Store.model;
 
     import jakarta.persistence.*;
-    import lombok.Builder;
-    import lombok.Getter;
-    import lombok.Setter;
+    import lombok.*;
     import org.springframework.security.core.GrantedAuthority;
     import org.springframework.security.core.authority.SimpleGrantedAuthority;
     import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +9,12 @@
     import java.time.LocalDateTime;
     import java.util.Collection;
     import java.util.List;
+    import java.util.stream.Collectors;
 
     @Builder
     @Entity
+    @NoArgsConstructor
+    @AllArgsConstructor
     public class User implements UserDetails {
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,28 +33,17 @@
         @Getter
         private String name;
 
-        @Enumerated(EnumType.STRING)
-        private Role role;
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        private List<UserRole> userRoles;
 
         @Setter
         private boolean enabled;
 
-        public User(String id, String email, String password, String picture, String name, Role role, boolean enabled) {
-            this.id = id;
-            this.email = email;
-            this.password = password;
-            this.picture = picture;
-            this.name = name;
-            this.role = role;
-            this.enabled = enabled;
-        }
-
-        public User() {
-        }
-
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return List.of(new SimpleGrantedAuthority(role.name()));
+            return userRoles.stream()
+                    .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getName().name()))
+                    .collect(Collectors.toList());
         }
 
         @Override

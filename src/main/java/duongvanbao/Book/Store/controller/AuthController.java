@@ -53,7 +53,7 @@ public class AuthController {
         try {
             res = authService.register(data);
         } catch (Exception e) {
-            return new ResponseEntity<>(new ErrorResponse("OTP registered failed!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorResponse("OTP registered failed! " + e), HttpStatus.OK);
         }
         return new ResponseEntity<>(new SuccessResponseWithData<>(res), HttpStatus.CREATED);
     }

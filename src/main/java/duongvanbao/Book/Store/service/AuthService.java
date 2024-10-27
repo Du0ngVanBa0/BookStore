@@ -2,8 +2,10 @@ package duongvanbao.Book.Store.service;
 
 import duongvanbao.Book.Store.config.JwtService;
 import duongvanbao.Book.Store.dto.auth.*;
+import duongvanbao.Book.Store.dto.user.RoleName;
 import duongvanbao.Book.Store.model.Role;
 import duongvanbao.Book.Store.model.User;
+import duongvanbao.Book.Store.model.UserRole;
 import duongvanbao.Book.Store.model.UserTicket;
 import duongvanbao.Book.Store.utils.Util;
 import jakarta.security.auth.message.AuthException;
@@ -24,15 +26,21 @@ public class AuthService {
     @Autowired
     private UserService userService;
     @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
     private UserTicketService userTicketService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRoleService userRoleService, RoleService roleService) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.userRoleService = userRoleService;
+        this.roleService = roleService;
     }
 
     public String register(RegisterRequest data) throws Exception {
@@ -41,7 +49,6 @@ public class AuthService {
                 .name(data.name())
                 .email(data.email())
                 .password(passwordEncoder.encode(data.password()))
-                .role(Role.USER)
                 .enabled(false)
                 .build();
         var ticket = UserTicket.builder()
@@ -51,6 +58,7 @@ public class AuthService {
                 .ticketType(TicketType.REGISTRATION)
                 .build();
         userService.save(user);
+        checkAndSolveIfNotExistRoleUser(user);
         userTicketService.save(ticket);
         emailService.sendOtpRegisterEmail(data.email(), otp, TicketType.REGISTRATION);
         return ticket.getId();
@@ -66,16 +74,28 @@ public class AuthService {
                     .email(thisUser.email())
                     .name(thisUser.name())
                     .picture(thisUser.picture())
-                    .role(Role.USER)
                     .enabled(true)
                     .build();
             userService.save(user);
+            checkAndSolveIfNotExistRoleUser(user);
         } else {
             user = userOptional.get();
         }
     
         String jwtToken = jwtService.generateToken(user);
         return new TokenResponse(jwtToken);
+    }
+
+    private void checkAndSolveIfNotExistRoleUser(User user) {
+        if (roleService.findByName(RoleName.USER).isEmpty()) {
+            Role userRole = new Role();
+            userRole.setName(RoleName.USER);
+            roleService.save(userRole);
+        }
+        Role role = roleService.findByName(RoleName.USER)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        UserRole userRoleEntry = new UserRole(user, role);
+        userRoleService.save(userRoleEntry);
     }
 
     public TokenResponse changePassword(String email, String password) throws Exception {
