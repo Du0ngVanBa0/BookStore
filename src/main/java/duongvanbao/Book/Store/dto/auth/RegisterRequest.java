@@ -11,7 +11,7 @@ public record RegisterRequest(
         @Pattern(message = "Password must be between 8 and 100 characters and cannot contain spaces!", regexp = "^[\\S]{8,100}$")
         String password,
         @NotBlank(message = "Display Name is required!")
-        @Pattern(message = "Display Name must be between 5 and 20 characters", regexp = "^[\\w ]{5,20}$")
+        @Pattern(message = "Display Name must be between 5 and 20 characters with no unicode", regexp = "^[\\w ]{5,20}$")
         String name
 ) {
 }
