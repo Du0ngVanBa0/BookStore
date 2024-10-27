@@ -35,7 +35,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public MessageResponse register(RegisterRequest data) throws Exception {
+    public String register(RegisterRequest data) throws Exception {
         String otp = Util.generateOtp();
         var user = User.builder()
                 .name(data.name())
@@ -53,10 +53,10 @@ public class AuthService {
         userService.save(user);
         userTicketService.save(ticket);
         emailService.sendOtpRegisterEmail(data.email(), otp, TicketType.REGISTRATION);
-        return new MessageResponse(ticket.getId());
+        return ticket.getId();
     }
 
-    public AuthResponse authenticateGoogle(GoogleUser thisUser) throws Exception {
+    public TokenResponse authenticateGoogle(GoogleUser thisUser) throws Exception {
         Optional<User> userOptional = userService.findByEmail(thisUser.email());
         User user;
     
@@ -75,10 +75,10 @@ public class AuthService {
         }
     
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken);
+        return new TokenResponse(jwtToken);
     }
 
-    public AuthResponse changePassword(String email, String password) throws Exception {
+    public TokenResponse changePassword(String email, String password) throws Exception {
         Optional<User> user = userService.findByEmail(email);
         if (user.isEmpty()) {
             throw new Exception("User not found");
@@ -87,7 +87,7 @@ public class AuthService {
             thisUser.setPassword(passwordEncoder.encode(password));
             userService.save(thisUser);
             String jwtToken = jwtService.generateToken(thisUser);
-            return new AuthResponse(jwtToken);
+            return new TokenResponse(jwtToken);
         }
     }
 
@@ -95,16 +95,16 @@ public class AuthService {
         return new MessageResponse("RE-GENERATE OTP successfully!");
     }
 
-    public AuthResponse verifyRegistration(UserTicket ticket, String otp) throws AuthException {
+    public TokenResponse verifyRegistration(UserTicket ticket, String otp) throws AuthException {
         userTicketService.verifyOtp(ticket, otp);
         User user = userService.findByEmail(ticket.getEmail()).orElseThrow(() -> new AuthException("User Not Found!"));
         user.setEnabled(true);
         userService.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken);
+        return new TokenResponse(jwtToken);
     }
 
-    public AuthResponse authenticate(AuthenticationRequest data) throws Exception {
+    public TokenResponse authenticate(AuthenticationRequest data) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -120,13 +120,13 @@ public class AuthService {
         );
         if (user.isEnabled()) {
             String jwtToken = jwtService.generateToken(user);
-            return new AuthResponse(jwtToken);
+            return new TokenResponse(jwtToken);
         } else {
             throw new Exception("The account or password is incorrect!");
         }
     }
 
-    public MessageResponse sendCPOtp(String email) throws Exception {
+    public TicketResponse sendCPOtp(String email) throws Exception {
         String otp = Util.generateOtp();
         var ticket = UserTicket.builder()
                 .email(email)
@@ -136,6 +136,6 @@ public class AuthService {
                 .build();
         userTicketService.save(ticket);
         emailService.sendOtpRegisterEmail(email, otp, TicketType.CHANGE_PASSWORD);
-        return new MessageResponse(ticket.getId());
+        return new TicketResponse(ticket.getId());
     }
 }

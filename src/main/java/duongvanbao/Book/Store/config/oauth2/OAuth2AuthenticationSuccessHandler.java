@@ -1,7 +1,7 @@
 package duongvanbao.Book.Store.config.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import duongvanbao.Book.Store.dto.auth.AuthResponse;
+import duongvanbao.Book.Store.dto.auth.TokenResponse;
 import duongvanbao.Book.Store.dto.auth.GoogleUser;
 import duongvanbao.Book.Store.service.AuthService;
 import jakarta.servlet.ServletException;
@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.ObjectProvider;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -51,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         );
         try {
             AuthService authService = authServiceProvider.getObject();
-            AuthResponse authResponse = authService.authenticateGoogle(googleUser);
+            TokenResponse authResponse = authService.authenticateGoogle(googleUser);
             response.setContentType("application/json");
             response.getWriter().print(new ObjectMapper().writeValueAsString(authResponse));
         } catch (Exception e) {
