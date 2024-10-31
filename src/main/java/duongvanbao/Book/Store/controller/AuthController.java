@@ -2,27 +2,20 @@ package duongvanbao.Book.Store.controller;
 
 import duongvanbao.Book.Store.dto.auth.*;
 import duongvanbao.Book.Store.dto.utils.errorResponse.ErrorResponse;
-import duongvanbao.Book.Store.dto.utils.errorResponse.ErrorResponseWithData;
 import duongvanbao.Book.Store.dto.utils.successResponse.SuccessResponseWithData;
 import duongvanbao.Book.Store.dto.utils.successResponse.SuccessResponseWithoutData;
 import duongvanbao.Book.Store.model.User;
 import duongvanbao.Book.Store.model.UserTicket;
-import duongvanbao.Book.Store.service.AuthService;
-import duongvanbao.Book.Store.service.EmailService;
-import duongvanbao.Book.Store.service.UserService;
-import duongvanbao.Book.Store.service.UserTicketService;
+import duongvanbao.Book.Store.service.*;
 import duongvanbao.Book.Store.utils.Util;
 import jakarta.security.auth.message.AuthException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -166,17 +159,5 @@ public class AuthController {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public ErrorResponseWithData<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((org.springframework.validation.FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return new ErrorResponseWithData<>(errors);
     }
 }

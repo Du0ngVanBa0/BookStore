@@ -58,7 +58,6 @@ public class AuthService {
                 .ticketType(TicketType.REGISTRATION)
                 .build();
         userService.save(user);
-        checkAndSolveIfNotExistRoleUser(user);
         userTicketService.save(ticket);
         emailService.sendOtpRegisterEmail(data.email(), otp, TicketType.REGISTRATION);
         return ticket.getId();

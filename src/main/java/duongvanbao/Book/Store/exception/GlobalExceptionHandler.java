@@ -25,6 +25,12 @@ public class GlobalExceptionHandler {
         return new ErrorResponseWithData<>(errors);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public ErrorResponse handleRunTimeExceptions(Exception ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     public ErrorResponse handleAllExceptions(Exception ex) {
