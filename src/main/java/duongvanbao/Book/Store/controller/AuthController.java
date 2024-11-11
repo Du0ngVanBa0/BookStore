@@ -10,6 +10,7 @@ import duongvanbao.Book.Store.service.*;
 import duongvanbao.Book.Store.utils.Util;
 import jakarta.security.auth.message.AuthException;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@AllArgsConstructor
 public class AuthController {
-    @Autowired
     private AuthService authService;
-    @Autowired
     private UserService userService;
-    @Autowired
     private UserTicketService userTicketService;
-    @Autowired
     private EmailService emailService;
-
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest data) {
