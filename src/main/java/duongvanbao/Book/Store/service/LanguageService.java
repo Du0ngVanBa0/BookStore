@@ -2,20 +2,16 @@ package duongvanbao.Book.Store.service;
 
 import duongvanbao.Book.Store.model.Language;
 import duongvanbao.Book.Store.repository.ILanguageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class LanguageService {
-    @Autowired
     private ILanguageRepository languageRepository;
-
-    public LanguageService(ILanguageRepository languageRepository) {
-        this.languageRepository = languageRepository;
-    }
 
     public List<Language> getAllLanguages() {
         return (List<Language>) languageRepository.findAll();

@@ -1,7 +1,7 @@
 package duongvanbao.Book.Store.config;
 
+import duongvanbao.Book.Store.config.oauth2.CustomOAuth2UserService;
 import duongvanbao.Book.Store.config.oauth2.OAuth2AuthenticationSuccessHandler;
-import duongvanbao.Book.Store.service.CustomOAuth2UserService;
 import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
                     corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
@@ -52,12 +53,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
-//                        .authorizationEndpoint()
-//                        .baseUri("/oauth2/authorize")
-//                        .and()
-//                        .redirectionEndpoint()
-//                        .baseUri("/login/oauth2/code/*")
-//                        .and()
                         .userInfoEndpoint()
                         .userService(customOAuth2UserService)
                         .and()

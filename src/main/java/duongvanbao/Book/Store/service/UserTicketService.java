@@ -4,15 +4,15 @@ import duongvanbao.Book.Store.model.UserTicket;
 import duongvanbao.Book.Store.repository.UserTicketRepository;
 import duongvanbao.Book.Store.utils.Util;
 import jakarta.security.auth.message.AuthException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserTicketService {
-    @Autowired
     private UserTicketRepository userTicketRepository;
 
     public Optional<UserTicket> findById(String ticketID) {

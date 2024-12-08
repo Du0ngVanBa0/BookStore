@@ -9,7 +9,7 @@ import duongvanbao.Book.Store.model.UserRole;
 import duongvanbao.Book.Store.model.UserTicket;
 import duongvanbao.Book.Store.utils.Util;
 import jakarta.security.auth.message.AuthException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -20,28 +20,16 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
-    @Autowired
     private EmailService emailService;
-    @Autowired
     private UserService userService;
-    @Autowired
     private UserRoleService userRoleService;
-    @Autowired
     private RoleService roleService;
-    @Autowired
     private UserTicketService userTicketService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public AuthService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRoleService userRoleService, RoleService roleService) {
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-        this.userRoleService = userRoleService;
-        this.roleService = roleService;
-    }
 
     public String register(RegisterRequest data) throws Exception {
         String otp = Util.generateOtp();
@@ -63,7 +51,7 @@ public class AuthService {
         return ticket.getId();
     }
 
-    public TokenResponse authenticateGoogle(GoogleUser thisUser) throws Exception {
+    public TokenResponse authenticateGoogle(GoogleUser thisUser){
         Optional<User> userOptional = userService.findByEmail(thisUser.email());
         User user;
     

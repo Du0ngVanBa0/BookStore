@@ -21,7 +21,6 @@ public class JwtService {
     }
 
     private final String jwtSecret = System.getenv("JWT_SECRET");
-    private final long jwtExpirationMs = 1000 * 60 * 60;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -44,6 +43,7 @@ public class JwtService {
             claims.put("picture", thisUser.getPicture());
         }
 
+        long jwtExpirationMs = 1000 * 60 * 60;
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

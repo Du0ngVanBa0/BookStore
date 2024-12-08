@@ -2,20 +2,16 @@ package duongvanbao.Book.Store.service;
 
 import duongvanbao.Book.Store.model.Supplier;
 import duongvanbao.Book.Store.repository.ISupplierRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class SupplierService {
-    @Autowired
     private ISupplierRepository supplierRepository;
-
-    public SupplierService(ISupplierRepository supplierRepository) {
-        this.supplierRepository = supplierRepository;
-    }
 
     public List<Supplier> getAllSuppliers() {
         return (List<Supplier>) supplierRepository.findAll();
